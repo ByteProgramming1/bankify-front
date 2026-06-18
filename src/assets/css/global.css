@@ -1,0 +1,45 @@
+/* Font */
+/* En principio la fuente se importa de esta forma, luego se añadirá a los assets para optimizar */
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap');
+
+* {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+
+:root {
+    /* Background */
+    --white-main: #F8FAFD;
+    --white-secondary: #FFFFFF;
+
+    --green-main: #03B691;
+    --green-light-1: #BFEDE3;
+    --green-light-2: #E7F5F6;
+
+    /* Others */
+    --red-main: #CF222E;
+    --red-light: #F2C9CC;
+
+    --yello-main: #E38F00;
+    --yello-light: #FAEED8;
+
+    /* Text */
+    --text-secondary: #596475;
+    --text-main: #0F1B2D;
+
+    /* Border */
+    --gray-border: #D9DFE5; /* Color */
+    
+    /* Radious sizes */
+    --radious-lg: 30px;
+    --radious-md: 15px;
+    --radious-sm: 10px;
+
+    font-family: "DM Sans", sans-serif;
+    font-optical-sizing: auto;
+}
+
+body {
+    background-color: var(--white-main);
+}
