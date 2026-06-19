@@ -16,7 +16,7 @@ export const CTA = () => {
             ya confían en nosotros.
           </p>
           
-          <button className="bankify-btn-white" onClick={() => navigate('/register')}>
+          <button className="bankify-btn-white" onClick={() => navigate('/auth/register')}>
             Abrir cuenta gratis &rarr;
           </button>
 
