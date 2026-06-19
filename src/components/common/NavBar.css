@@ -1,0 +1,87 @@
+/* ==========================================================================
+   Estilos para el Navbar y Botones de Bankify (CSS Puro)
+   ========================================================================== */
+
+/* Contenedor principal de la barra */
+.bankify-navbar {
+    width: 100%;
+    height: 72px; /* Altura estándar y elegante de la maqueta */
+    background-color: var(--white-secondary);
+    border-b: 1px solid var(--gray-border);
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+}
+
+/* Contenedor interno para dar el "aire" y que no se pegue a las esquinas */
+.navbar-container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-sizing: border-box;
+}
+
+/* Contenedor del logo */
+.navbar-logo {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.navbar-logo img {
+    height: 36px; /* Ajuste perfecto para el logo .webp */
+    width: auto;
+    object-fit: contain;
+}
+
+/* Grupo de botones a la derecha */
+.navbar-actions {
+    display: flex;
+    align-items: center;
+    gap: 16px; /* Separación exacta entre los dos botones */
+}
+
+/* ==========================================================================
+   Botón Genérico Modulable
+   ========================================================================== */
+.bankify-btn {
+    padding: 10px 24px;
+    font-size: 14px;
+    font-weight: 700; /* Bold de DM Sans */
+    font-family: "DM Sans", sans-serif;
+    border-radius: var(--radious-sm); /* Usamos el radio que dejó tu compañero */
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    text-align: center;
+    white-space: nowrap;
+    box-sizing: border-box;
+}
+
+/* Variante 1: Registrarse (Relleno Verde) */
+.bankify-btn-solid {
+    background-color: var(--green-main);
+    color: var(--white-secondary);
+    border: none;
+}
+
+.bankify-btn-solid:hover {
+    opacity: 0.9;
+}
+
+/* Variante 2: Iniciar Sesión (Borde Verde) */
+.bankify-btn-outline {
+    background-color: transparent;
+    color: var(--green-main);
+    border: 1px solid var(--green-main);
+}
+
+.bankify-btn-outline:hover {
+    background-color: rgba(3, 182, 145, 0.05); /* Un toque sutil al pasar el mouse */
+}
