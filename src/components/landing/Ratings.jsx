@@ -1,6 +1,6 @@
 import React from 'react';
 import { IconStarFilled } from '@tabler/icons-react';
-import './Ratings.css';
+import "./../../assets/css/landing/Ratings.css"
 
 export const Ratings = () => {
   const testimonials = [

@@ -2,7 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import CustomButton from '../common/CustomButton';
 import heroImg from '../../assets/img/hero.png';
-import './Hero.css';
+import './../../assets/css/landing/Hero.css';
 
 export const Hero = () => {
     const navigate = useNavigate();

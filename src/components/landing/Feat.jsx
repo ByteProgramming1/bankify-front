@@ -1,6 +1,6 @@
 import React from 'react';
 import { IconBolt, IconCreditCard, IconShieldCheck } from '@tabler/icons-react'; // 1. Importamos de Tabler
-import './Feat.css';
+import './../../assets/css/landing/Feat.css';
 
 export const Feat = () => {
     return (

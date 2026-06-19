@@ -7,7 +7,7 @@ import Navbar from '../../components/common/NavBar';
 
 
 // @ts-ignore
-import './RegisterView.css';
+import "./../../assets/css/auth/RegisterView.css"
 
 export const RegisterView: React.FC = () => {
     const navigate = useNavigate();

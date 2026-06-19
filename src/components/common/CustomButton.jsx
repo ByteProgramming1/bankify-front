@@ -1,5 +1,5 @@
 import React from 'react';
-import '../common/NavBar.css';
+import "./../../assets/css/common/NavBar.css"
 
 export const CustomButton = ({ children, variant = 'solid', onClick, ...props }) => {
     const variantClasses = {

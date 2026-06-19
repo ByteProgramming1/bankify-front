@@ -6,7 +6,7 @@ import { InputField } from '../../components/auth/InputField';
 import Navbar from '../../components/common/NavBar';
 
 // @ts-ignore
-import './LoginView.css';
+import "./../../assets/css/auth/LoginView.css"
 
 export const LoginView: React.FC = () => {
     const navigate = useNavigate();
