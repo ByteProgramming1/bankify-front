@@ -12,17 +12,14 @@ import "./../../assets/css/auth/RegisterView.css"
 export const RegisterView: React.FC = () => {
     const navigate = useNavigate();
 
-    const [fullName, setFullName] = useState<string>('');
     const [email, setEmail] = useState<string>('');
-    const [accountType, setAccountType] = useState<string>('Ahorros');
     const [password, setPassword] = useState<string>('');
     const [showPassword, setShowPassword] = useState<boolean>(false);
-    const [acceptTerms, setAcceptTerms] = useState<boolean>(false);
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        console.log('Register success:', { fullName, email, accountType, password, acceptTerms });
+        console.log('Register success:', { email, password });
 
         navigate('/app/dashboard');
     };
@@ -35,16 +32,6 @@ export const RegisterView: React.FC = () => {
                     <form className="register-form" onSubmit={handleSubmit}>
 
                         <InputField
-                            label="Nombre Completo"
-                            id="fullName"
-                            placeholder="Carlos Mendoza"
-                            value={fullName}
-                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFullName(e.target.value)}
-                            iconLeft={IconUser}
-                            required
-                        />
-
-                        <InputField
                             label="Correo Electrónico"
                             id="email"
                             type="email"
@@ -54,22 +41,6 @@ export const RegisterView: React.FC = () => {
                             iconLeft={IconMail}
                             required
                         />
-
-                        <div className="input-group">
-                            <label htmlFor="accountType">Tipo de Cuenta</label>
-                            <div className="input-wrapper">
-                                <select
-                                    id="accountType"
-                                    className="register-select"
-                                    style={{ paddingLeft: '14px' }}
-                                    value={accountType}
-                                    onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setAccountType(e.target.value)}
-                                >
-                                    <option value="Ahorros">Ahorros</option>
-                                    <option value="Corriente">Corriente</option>
-                                </select>
-                            </div>
-                        </div>
 
                         <InputField
                             label="Contraseña"
@@ -83,17 +54,6 @@ export const RegisterView: React.FC = () => {
                             onIconRightClick={() => setShowPassword(!showPassword)}
                             required
                         />
-
-                        <div className="checkbox-group">
-                            <input
-                                type="checkbox"
-                                id="terms"
-                                checked={acceptTerms}
-                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setAcceptTerms(e.target.checked)}
-                                required
-                            />
-                            <label htmlFor="terms">Acepto los términos y condiciones</label>
-                        </div>
 
                         <button type="submit" className="bankify-btn-submit">
                             Crear mi cuenta
