@@ -1,11 +1,12 @@
 import NavBar from "../components/common/NavBar"
+import Hero from "../components/landing/Hero"
 
 const HomeView = () => {
     return (
         <div>
             <NavBar></NavBar>
             
-            <h1>Home View (landing page)</h1>
+            <Hero></Hero>
         </div>
     )
 }

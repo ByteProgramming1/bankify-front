@@ -1,8 +1,14 @@
 import React from 'react';
-import "../common/NavBar.css"
+import '../common/NavBar.css';
 
 export const CustomButton = ({ children, variant = 'solid', onClick, ...props }) => {
-    const buttonClass = variant === 'solid' ? 'bankify-btn-solid' : 'bankify-btn-outline';
+    const variantClasses = {
+        solid: 'bankify-btn-solid',
+        outline: 'bankify-btn-outline',
+        'neutral-outline': 'bankify-btn-neutral-outline'
+    };
+
+    const buttonClass = variantClasses[variant] || 'bankify-btn-solid';
 
     return (
         <button
