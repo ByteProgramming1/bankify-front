@@ -1,5 +1,5 @@
 import React from 'react';
-import './Metrics.css';
+import './../../assets/css/landing/Metrics.css';
 
 export const Metrics = () => {
   return (
