@@ -1,24 +1,23 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { IconMail, IconLock, IconEye, IconEyeOff } from '@tabler/icons-react';
 import { AuthCard } from '../../components/auth/AuthCard';
 import { InputField } from '../../components/auth/InputField';
 import Navbar from '../../components/common/NavBar';
 
-// @ts-ignore
-import "./../../assets/css/auth/LoginView.css"
+import "./../../assets/css/auth/RegisterView.css"
 
-export const LoginView: React.FC = () => {
+export const RegisterView= () => {
     const navigate = useNavigate();
 
-    const [email, setEmail] = useState<string>('');
-    const [password, setPassword] = useState<string>('');
-    const [showPassword, setShowPassword] = useState<boolean>(false);
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
 
-        console.log('Login success:', { email, password });
+        console.log('Register success:', { email, password });
 
         navigate('/app/dashboard');
     };
@@ -26,9 +25,9 @@ export const LoginView: React.FC = () => {
     return (
         <>
             <Navbar></Navbar>
-            <div className="login-page">
-                <AuthCard title="Accede a tu cuenta" subtitle="Tu banco digital, en cualquier lugar.">
-                    <form className="login-form" onSubmit={handleSubmit}>
+            <div className="register-page">
+                <AuthCard title="Crea tu cuenta" subtitle="Completa tu información para unirte al sistema">
+                    <form className="register-form" onSubmit={handleSubmit}>
 
                         <InputField
                             label="Correo Electrónico"
@@ -36,7 +35,7 @@ export const LoginView: React.FC = () => {
                             type="email"
                             placeholder="john@example.com"
                             value={email}
-                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
+                            onChange={(e) => setEmail(e.target.value)}
                             iconLeft={IconMail}
                             required
                         />
@@ -47,7 +46,7 @@ export const LoginView: React.FC = () => {
                             type={showPassword ? 'text' : 'password'}
                             placeholder="********"
                             value={password}
-                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
+                            onChange={(e) => setPassword(e.target.value)}
                             iconLeft={IconLock}
                             iconRight={showPassword ? IconEyeOff : IconEye}
                             onIconRightClick={() => setShowPassword(!showPassword)}
@@ -55,7 +54,7 @@ export const LoginView: React.FC = () => {
                         />
 
                         <button type="submit" className="bankify-btn-submit">
-                            Iniciar Sesión
+                            Crear mi cuenta
                         </button>
                     </form>
                 </AuthCard>
@@ -64,4 +63,4 @@ export const LoginView: React.FC = () => {
     );
 };
 
-export default LoginView;
+export default RegisterView;
