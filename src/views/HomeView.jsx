@@ -9,19 +9,13 @@ import Ratings from "../components/landing/Ratings"
 const HomeView = () => {
     return (
         <div>
-            <NavBar></NavBar>
-
-            <Hero></Hero>
-
-            <Feat></Feat>
-
-            <Metrics></Metrics>
-
-            <Ratings></Ratings>
-
-            <CTA></CTA>
-
-            <Footer></Footer>
+            <NavBar />
+            <Hero />
+            <Feat />
+            <Metrics />
+            <Ratings />
+            <CTA />
+            <Footer />
         </div>
     )
 }
