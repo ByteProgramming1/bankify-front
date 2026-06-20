@@ -1,5 +1,5 @@
 import { lazy, Suspense } from "react";
-import { Outlet, Route, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 
 // Landing views (home & auth)
 const HomeView = lazy(() => import("./views/HomeView"));
@@ -7,6 +7,7 @@ const LoginView = lazy(() => import("./views/auth/LoginView"));
 const RegisterView = lazy(() => import("./views/auth/RegisterView"));
 
 // App views
+const AppLayout = lazy(() => import("./components/app/AppLayout"));
 const DashboardView = lazy(() => import("./views/app/DashboardView"));
 const TransferencesView = lazy(() => import("./views/app/TransferencesView"));
 const CreditsView = lazy(() => import("./views/app/CreditsView"));
@@ -22,7 +23,7 @@ const Router = () => {
         <Route path="/auth/register" element={<RegisterView />} />
 
         {/* App */}
-        <Route path="/app" element={<><header>Top header</header><Outlet /></>}> {/* Crear luego componente de barra superior */}
+        <Route path="/app" element={<AppLayout />}>
           <Route path="dashboard" element={<DashboardView />} />
           <Route path="transferences" element={<TransferencesView />} />
           <Route path="credits" element={<CreditsView />} />
