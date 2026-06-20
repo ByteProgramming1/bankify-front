@@ -1,13 +1,9 @@
-/* ==========================================================================
-   Estilos para el Navbar y Botones de Bankify (CSS Puro)
-   ========================================================================== */
-
 /* Contenedor principal de la barra */
 .bankify-navbar {
     width: 100%;
-    height: 72px; /* Altura estándar y elegante de la maqueta */
+    height: 72px; 
     background-color: var(--white-secondary);
-    border-b: 1px solid var(--gray-border);
+    border-block: 1px solid var(--gray-border);
     position: fixed;
     top: 0;
     left: 0;
@@ -16,7 +12,6 @@
     align-items: center;
 }
 
-/* Contenedor interno para dar el "aire" y que no se pegue a las esquinas */
 .navbar-container {
     width: 100%;
     max-width: 1200px;
@@ -26,9 +21,9 @@
     justify-content: space-between;
     align-items: center;
     box-sizing: border-box;
+    border-bottom: medium;
 }
 
-/* Contenedor del logo */
 .navbar-logo {
     display: flex;
     align-items: center;
@@ -36,7 +31,7 @@
 }
 
 .navbar-logo img {
-    height: 36px; /* Ajuste perfecto para el logo .webp */
+    height: 72px; 
     width: auto;
     object-fit: contain;
 }
@@ -45,18 +40,15 @@
 .navbar-actions {
     display: flex;
     align-items: center;
-    gap: 16px; /* Separación exacta entre los dos botones */
+    gap: 16px; 
 }
 
-/* ==========================================================================
-   Botón Genérico Modulable
-   ========================================================================== */
 .bankify-btn {
     padding: 10px 24px;
     font-size: 14px;
-    font-weight: 700; /* Bold de DM Sans */
+    font-weight: 700; 
     font-family: "DM Sans", sans-serif;
-    border-radius: var(--radious-sm); /* Usamos el radio que dejó tu compañero */
+    border-radius: var(--radious-sm); 
     cursor: pointer;
     transition: all 0.2s ease-in-out;
     text-align: center;
@@ -83,5 +75,5 @@
 }
 
 .bankify-btn-outline:hover {
-    background-color: rgba(3, 182, 145, 0.05); /* Un toque sutil al pasar el mouse */
+    background-color: rgba(3, 182, 145, 0.05); 
 }

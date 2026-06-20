@@ -1,6 +1,6 @@
 import React from 'react';
 import logoBankify from '../../assets/img/Logo.webp';
-import './Footer.css';
+import './../../assets/css/landing/Footer.css';
 
 export const Footer = () => {
     return (
