@@ -21,8 +21,8 @@
     --red-main: #CF222E;
     --red-light: #F2C9CC;
 
-    --yello-main: #E38F00;
-    --yello-light: #FAEED8;
+    --yellow-main: #E38F00;
+    --yellow-light: #FCF6EB;
 
     /* Text */
     --text-secondary: #596475;
@@ -42,4 +42,12 @@
 
 body {
     background-color: var(--white-main);
+}
+
+.main-content {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 24px;
+    display: flex;
+    flex-direction: column;
 }
