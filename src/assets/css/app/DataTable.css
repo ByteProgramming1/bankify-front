@@ -19,8 +19,8 @@
 .data-table th {
     text-align: left;
     padding: 14px 20px;
-    font-size: 12px;
-    font-weight: 700;
+    font-size: 12.5px;
+    font-weight: 800;
     letter-spacing: 0.04em;
     text-transform: uppercase;
     color: var(--text-secondary);
@@ -29,9 +29,11 @@
 
 .data-table td {
     padding: 16px 20px;
-    font-size: 14px;
+    font-size: 13px;
     color: var(--text-main);
+    font-weight: 550;
     white-space: nowrap;
+    color: var(--text-main);
 }
 
 .data-table tbody tr:not(:last-child) {

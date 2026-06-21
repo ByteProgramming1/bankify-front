@@ -4,9 +4,10 @@
 
 .sort-dropdown-trigger {
     display: inline-flex;
+    min-width: 300px;
     align-items: center;
     gap: 8px;
-    height: 48px;
+    height: 45px;
     background-color: var(--white-secondary);
     border: 1px solid var(--gray-border);
     border-radius: var(--radious-sm);
@@ -27,7 +28,7 @@
     position: absolute;
     top: calc(100% + 6px);
     right: 0;
-    min-width: 220px;
+    min-width: 300px;
     background-color: var(--white-secondary);
     border: 1px solid var(--gray-border);
     border-radius: var(--radious-sm);
