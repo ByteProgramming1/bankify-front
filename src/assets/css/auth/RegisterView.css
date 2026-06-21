@@ -1,6 +1,6 @@
 .register-page {
     width: 100%;
-    min-height: calc(100vh - 72px);
+    min-height: calc(90vh - 72px);
     margin-top: 72px;
     background-color: var(--white-main);
     display: flex;
