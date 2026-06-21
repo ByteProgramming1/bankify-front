@@ -1,8 +1,8 @@
-import React from 'react';
 import CustomButton from "../common/CustomButton";
 import logoBankify from "../../assets/img/Logo.webp";
 import { useNavigate } from 'react-router-dom';
 
+import "../../assets/css/common/NavBar.css";
 
 export const Navbar = () => {
     const navigate = useNavigate();

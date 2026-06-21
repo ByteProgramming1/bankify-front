@@ -6,6 +6,7 @@ import { InputField } from '../../components/auth/InputField';
 import Navbar from '../../components/common/NavBar';
 
 import "./../../assets/css/auth/RegisterView.css"
+import "./../../assets/css/auth/LoginView.css"
 
 export const RegisterView= () => {
     const navigate = useNavigate();
