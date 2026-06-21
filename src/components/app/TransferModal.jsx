@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { IconArrowRight, IconCurrencyDollar } from '@tabler/icons-react';
 import Modal from '../common/Modal';
 import AccountSummaryCard from './AccountSummaryCard';
-import './../../assets/css/app/TransferModal.css';
+import './../../assets/css/common/Modal.css';
 
 // TODO: reemplazar por datos reales (cuenta del usuario autenticado y lista de
 // contactos/destinatarios) cuando exista integración con el backend.
@@ -50,19 +50,19 @@ export const TransferModal = ({ isOpen, onClose, onSubmit }) => {
 
     return (
         <Modal isOpen={isOpen} onClose={onClose}>
-            <h2 className="transfer-modal-title">Nueva Transferencia</h2>
-            <p className="transfer-modal-subtitle">Mueve tus fondos a otra cuenta de forma segura</p>
+            <h2 className="modal-title">Nueva Transferencia</h2>
+            <p className="modal-subtitle">Mueve tus fondos a otra cuenta de forma segura</p>
 
-            <div className="transfer-modal-accounts">
+            <div className="modal-accounts">
                 <AccountSummaryCard {...MOCK_ORIGIN_ACCOUNT} />
-                <span className="transfer-modal-arrow">
+                <span className="modal-arrow">
                     <IconArrowRight size={16} />
                 </span>
                 {recipient && <AccountSummaryCard label="CUENTA DESTINO" {...recipient} />}
             </div>
 
-            <form className="transfer-modal-form" onSubmit={handleSubmit}>
-                <div className="transfer-field">
+            <form className="modal-form" onSubmit={handleSubmit}>
+                <div className="modal-field">
                     <label htmlFor="recipient">Destinatario*</label>
                     <select
                         id="recipient"
@@ -78,15 +78,15 @@ export const TransferModal = ({ isOpen, onClose, onSubmit }) => {
                     </select>
                 </div>
 
-                <div className="transfer-field">
+                <div className="modal-field">
                     <label htmlFor="amount">Monto a Transferir*</label>
-                    <div className="transfer-field-input-wrapper">
-                        <IconCurrencyDollar size={18} className="transfer-field-icon" />
+                    <div className="modal-field-input-wrapper">
+                        <IconCurrencyDollar size={18} className="modal-field-icon" />
                         <input
                             id="amount"
                             type="number"
                             min="0"
-                            step="1000"
+                            step="50"
                             placeholder="0"
                             value={amount}
                             onChange={(e) => setAmount(e.target.value)}
@@ -95,7 +95,7 @@ export const TransferModal = ({ isOpen, onClose, onSubmit }) => {
                     </div>
                 </div>
 
-                <div className="transfer-field">
+                <div className="modal-field">
                     <label htmlFor="message">Mensaje (Opcional)</label>
                     <textarea
                         id="message"
@@ -106,7 +106,7 @@ export const TransferModal = ({ isOpen, onClose, onSubmit }) => {
                     />
                 </div>
 
-                <button type="submit" className="transfer-modal-submit">
+                <button type="submit" className="modal-submit">
                     Confirmar Transferencia <IconArrowRight size={16} />
                 </button>
             </form>

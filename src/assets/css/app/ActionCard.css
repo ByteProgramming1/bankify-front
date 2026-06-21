@@ -5,7 +5,7 @@
     justify-content: center;
     gap: 10px;
     width: 100%;
-    min-height: 180px;
+    min-height: 200px;
     background-color: var(--white-secondary);
     border: 1px solid var(--gray-border);
     border-radius: var(--radious-md);
@@ -13,12 +13,14 @@
     cursor: pointer;
     text-align: center;
     font-family: "DM Sans", sans-serif;
-    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease, .15s ease-in-out;
 }
 
 .action-card:hover {
     border-color: var(--green-main);
+    transform: scale(1.03);
     box-shadow: 0 4px 16px rgba(3, 182, 145, 0.08);
+    transition: .15s ease-in-out;
 }
 
 .action-card-icon {

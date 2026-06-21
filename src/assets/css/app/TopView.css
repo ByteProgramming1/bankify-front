@@ -1,4 +1,4 @@
-.transferences-view {
+.top-view {
     width: 100%;
     max-width: 1280px;
     margin: 0 auto;
@@ -9,7 +9,7 @@
     gap: 20px;
 }
 
-.transferences-header {
+.top-header {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
@@ -17,59 +17,60 @@
     gap: 16px;
 }
 
-.transferences-title-group {
+.top-title-group {
     display: flex;
     align-items: flex-start;
-    gap: 14px;
+    gap: 12px;
 }
 
-.transferences-title-icon {
+.top-title-icon {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 40px;
-    height: 40px;
-    min-width: 40px;
+    width: 48px;
+    height: 48px;
+    min-width: 48px;
     border-radius: var(--radious-sm);
-    background-color: var(--green-light-2);
+    background-color: var(--green-light-1);
     color: var(--green-main);
 }
 
-.transferences-header h1 {
+.top-header h1 {
     font-size: 22px;
     font-weight: 700;
     color: var(--text-main);
     margin-bottom: 4px;
+    line-height: 25px;
 }
 
-.transferences-header p {
+.top-header p {
     font-size: 13px;
     color: var(--text-secondary);
 }
 
-.transferences-toolbar {
+.top-toolbar {
     display: flex;
     align-items: center;
-    gap: 16px;
+    gap: 10px;
 }
 
-.transferences-search {
+.top-search {
     position: relative;
     display: flex;
     align-items: center;
     flex: 1;
 }
 
-.transferences-search-icon {
+.top-search-icon {
     position: absolute;
     left: 16px;
     color: var(--text-secondary);
     pointer-events: none;
 }
 
-.transferences-search input {
+.top-search input {
     width: 100%;
-    height: 48px;
+    height: 45px;
     background-color: var(--white-secondary);
     border: 1px solid var(--gray-border);
     border-radius: var(--radious-sm);
@@ -82,12 +83,12 @@
     transition: border-color 0.2s ease;
 }
 
-.transferences-search input:focus {
+.top-search input:focus {
     border-color: var(--green-main);
 }
 
-.transferences-btn-content {
+.top-btn-content {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
 }
