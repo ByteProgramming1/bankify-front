@@ -1,5 +1,5 @@
 import { NavLink, useNavigate } from 'react-router-dom';
-import { IconChevronDown, IconUserCircle } from '@tabler/icons-react';
+import { IconUserCircle } from '@tabler/icons-react';
 import logoBankify from '../../assets/img/Logo.webp';
 import './../../assets/css/app/AppNavbar.css';
 
@@ -43,7 +43,6 @@ export const AppNavbar = () => {
                 <div className="app-navbar-user">
                     <IconUserCircle size={28} stroke={1.5} />
                     <span className="app-navbar-user-name">{MOCK_USER.name}</span>
-                    <IconChevronDown size={16} />
                 </div>
 
             </div>

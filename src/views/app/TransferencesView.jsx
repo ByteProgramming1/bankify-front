@@ -1,10 +1,10 @@
 import { useState } from 'react';
-import { IconArrowsRightLeft, IconPlus, IconSearch } from '@tabler/icons-react';
+import { IconArrowsRightLeft, IconSend, IconSearch } from '@tabler/icons-react';
 import CustomButton from '../../components/common/CustomButton';
 import DataTable from '../../components/app/DataTable';
 import TransferModal from '../../components/app/TransferModal';
 import SortDropdown from '../../components/app/SortDropdown';
-import './../../assets/css/app/TransferencesView.css';
+import './../../assets/css/app/TopView.css';
 
 // TODO: reemplazar por datos del backend (ej: useEffect + fetch a /api/transferences)
 const MOCK_TRANSFERS = [
@@ -60,11 +60,11 @@ export const TransferencesView = () => {
     );
 
     return (
-        <div className="transferences-view">
-            <div className="transferences-header">
-                <div className="transferences-title-group">
-                    <span className="transferences-title-icon">
-                        <IconArrowsRightLeft size={22} stroke={1.8} />
+        <div className="top-view">
+            <div className="top-header">
+                <div className="top-title-group">
+                    <span className="top-title-icon">
+                        <IconArrowsRightLeft size={24} stroke={2.2} />
                     </span>
                     <div>
                         <h1>Mis Transacciones</h1>
@@ -73,15 +73,15 @@ export const TransferencesView = () => {
                 </div>
 
                 <CustomButton variant="solid" onClick={() => setIsModalOpen(true)}>
-                    <span className="transferences-btn-content">
-                        <IconPlus size={16} /> Nueva Transferencia
+                    <span className="top-btn-content">
+                        <IconSend size={16} stroke={2.2} /> Nueva Transferencia
                     </span>
                 </CustomButton>
             </div>
 
-            <div className="transferences-toolbar">
-                <div className="transferences-search">
-                    <IconSearch size={18} className="transferences-search-icon" />
+            <div className="top-toolbar">
+                <div className="top-search">
+                    <IconSearch size={18} className="top-search-icon" />
                     <input
                         type="text"
                         placeholder="Buscar transferencia por destinatario o monto"
@@ -90,7 +90,7 @@ export const TransferencesView = () => {
                     />
                 </div>
 
-                <div className="transferences-sort">
+                <div className="top-sort">
                     <SortDropdown options={SORT_OPTIONS} value={sortBy} onChange={setSortBy} />
                 </div>
             </div>
