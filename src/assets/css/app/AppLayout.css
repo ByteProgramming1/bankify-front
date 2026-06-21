@@ -1,0 +1,11 @@
+.app-layout {
+    width: 100%;
+    min-height: 100vh;
+    background-color: var(--white-main);
+}
+
+.app-layout-content {
+    width: 100%;
+    margin-top: 72px; /* alto de .app-navbar */
+    box-sizing: border-box;
+}
