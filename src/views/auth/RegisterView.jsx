@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { IconMail, IconLock, IconEye, IconEyeOff } from '@tabler/icons-react';
 import { AuthCard } from '../../components/auth/AuthCard';
 import { InputField } from '../../components/auth/InputField';
+import { isBugFixed } from '../../utils/authUtils';
 
 import "./../../assets/css/auth/RegisterView.css"
 import "./../../assets/css/auth/LoginView.css"
@@ -40,10 +41,7 @@ export const RegisterView = () => {
 
         console.log('Register success:', newUser);
 
-        const isBugFixed = localStorage.getItem('bug_correlacion_fixed') === 'true';
-        
-        if (!isBugFixed) {
-            alert('¡Cuenta creada con éxito! Sin embargo, el sistema presenta un error de correlación de datos. No podrás iniciar sesión hasta que el Administrador cargue el archivo de estadística.');
+        if (!isBugFixed()) {
             navigate('/auth/login');
         } else {
             localStorage.setItem('bankify_current_user', JSON.stringify(newUser));
@@ -59,7 +57,7 @@ export const RegisterView = () => {
 
                         {/* Contenedor visual para mostrar el error si existe */}
                         {error && (
-                            <div style={{ color: '#dc3545', fontSize: '14px', textAlign: 'center', marginBottom: '15px', fontWeight: '500' }}>
+                            <div className="error-banner">
                                 {error}
                             </div>
                         )}

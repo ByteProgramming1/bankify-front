@@ -1,14 +1,14 @@
 import logoBankify from "../../assets/img/Logo.webp";
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import CustomButton from "../common/CustomButton";
+import { getCurrentUser } from "../../utils/authUtils";
 
 import "../../assets/css/common/NavBar.css";
 
 export const Navbar = () => {
     const navigate = useNavigate();
-    useLocation(); 
-    const sessionUser = localStorage.getItem('bankify_current_user');
-    const user = sessionUser ? JSON.parse(sessionUser) : null;
+    useLocation();
+    const user = getCurrentUser();
 
     const handleLoginRedirect = () => {
         navigate("/auth/login");

@@ -1,5 +1,6 @@
 import { lazy, Suspense } from "react";
-import { Route, Routes, useLocation } from "react-router-dom";
+import { Route, Routes, Navigate, useLocation } from "react-router-dom";
+import { getCurrentUser } from "./utils/authUtils";
 import NavBar from "./components/common/NavBar";
 
 // Landing views (home & auth)
@@ -14,6 +15,22 @@ const TransferencesView = lazy(() => import("./views/app/TransferencesView"));
 const CreditsView = lazy(() => import("./views/app/CreditsView"));
 const AdminView = lazy(() => import("./views/app/AdminView"));
 
+const AuthGuard = ({ children }) => {
+  const user = getCurrentUser();
+  if (!user) {
+    return <Navigate to="/auth/login" replace />;
+  }
+  return children;
+};
+
+const AdminGuard = ({ children }) => {
+  const user = getCurrentUser();
+  if (!user || user.role !== 'admin') {
+    return <Navigate to="/app/dashboard" replace />;
+  }
+  return children;
+};
+
 const Router = () => {
   const location = useLocation();
   return (
@@ -26,11 +43,11 @@ const Router = () => {
         <Route path="/auth/register" element={<RegisterView />} />
 
         {/* App */}
-        <Route path="/app" element={<AppLayout />}>
+        <Route path="/app" element={<AuthGuard><AppLayout /></AuthGuard>}>
           <Route path="dashboard" element={<DashboardView />} />
           <Route path="transferences" element={<TransferencesView />} />
           <Route path="credits" element={<CreditsView />} />
-          <Route path="admin" element={<AdminView />} />
+          <Route path="admin" element={<AdminGuard><AdminView /></AdminGuard>} />
 
           {/* NOT FOUND */}
           <Route path="*" element={<h1>ERROR 404, NOT FOUND (ON APP)</h1>} />

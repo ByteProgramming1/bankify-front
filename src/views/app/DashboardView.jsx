@@ -1,19 +1,16 @@
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { IconArrowsRightLeft, IconClipboardList, IconClipboardPlus, IconSend } from '@tabler/icons-react';
 import ActionCard from '../../components/app/ActionCard';
-import './../../assets/css/app/DashboardView.css';
-import { useState } from 'react';
-
 import CreditModal from "../../components/app/Creditmodal";
 import TransferModal from "../../components/app/TransferModal";
+import { getCurrentUser } from '../../utils/authUtils';
+import './../../assets/css/app/DashboardView.css';
 
 export const DashboardView = () => {
     const [modalForm, setModalForm] = useState(null);
-
     const navigate = useNavigate();
-
-    const sessionUser = localStorage.getItem('bankify_current_user');
-    const user = sessionUser ? JSON.parse(sessionUser) : null;
+    const user = getCurrentUser();
     const userName = user ? user.fullName : 'Invitado';
 
     const actions = [

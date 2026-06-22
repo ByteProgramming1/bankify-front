@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { IconMail, IconLock, IconEye, IconEyeOff } from '@tabler/icons-react';
 import { AuthCard } from '../../components/auth/AuthCard';
 import { InputField } from '../../components/auth/InputField';
+import { isBugFixed } from '../../utils/authUtils';
 
 import "./../../assets/css/auth/LoginView.css"
 
@@ -27,9 +28,8 @@ export const LoginView = () => {
         }
 
         if (userFound.role === 'client') {
-            const isBugFixed = localStorage.getItem('bug_correlacion_fixed') === 'true';
-            if (!isBugFixed) {
-                setError('Error de correlación de datos en el sistema. El administrador debe cargar el archivo de estadística primero.');
+            if (!isBugFixed()) {
+                setError('Sistema en mantenimiento temporal. Por favor, intente más tarde o contacte a soporte.');
                 return;
             }
         }
@@ -52,7 +52,7 @@ export const LoginView = () => {
                     <form className="login-form" onSubmit={handleSubmit}>
 
                         {error && (
-                            <div style={{ color: '#dc3545', fontSize: '14px', textAlign: 'center', marginBottom: '15px', fontWeight: '500' }}>
+                            <div className="error-banner">
                                 {error}
                             </div>
                         )}
