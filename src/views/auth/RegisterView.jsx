@@ -8,19 +8,48 @@ import Navbar from '../../components/common/NavBar';
 import "./../../assets/css/auth/RegisterView.css"
 import "./../../assets/css/auth/LoginView.css"
 
-export const RegisterView= () => {
+export const RegisterView = () => {
     const navigate = useNavigate();
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
+    
+    const [error, setError] = useState(null);
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        setError(null);
 
-        console.log('Register success:', { email, password });
+        const currentUsers = JSON.parse(localStorage.getItem('bankify_users') || '[]');
 
-        navigate('/app/dashboard');
+        const emailExists = currentUsers.some((u) => u.email === email);
+        if (emailExists) {
+            setError('Este correo electrónico ya está registrado.');
+            return;
+        }
+
+        const newUser = {
+            email,
+            password,
+            role: 'client',
+            fullName: email.split('@')[0] 
+        };
+
+        currentUsers.push(newUser);
+        localStorage.setItem('bankify_users', JSON.stringify(currentUsers));
+
+        console.log('Register success:', newUser);
+
+        const isBugFixed = localStorage.getItem('bug_correlacion_fixed') === 'true';
+        
+        if (!isBugFixed) {
+            alert('¡Cuenta creada con éxito! Sin embargo, el sistema presenta un error de correlación de datos. No podrás iniciar sesión hasta que el Administrador cargue el archivo de estadística.');
+            navigate('/login'); // Lo mandamos al login para que vea el bloqueo si intenta entrar
+        } else {
+            localStorage.setItem('bankify_current_user', JSON.stringify(newUser));
+            navigate('/app/dashboard');
+        }
     };
 
     return (
@@ -29,6 +58,13 @@ export const RegisterView= () => {
             <div className="register-page">
                 <AuthCard title="Crea tu cuenta" subtitle="Completa tu información para unirte al sistema">
                     <form className="register-form" onSubmit={handleSubmit}>
+
+                        {/* Contenedor visual para mostrar el error si existe */}
+                        {error && (
+                            <div style={{ color: '#dc3545', fontSize: '14px', textAlign: 'center', marginBottom: '15px', fontWeight: '500' }}>
+                                {error}
+                            </div>
+                        )}
 
                         <InputField
                             label="Correo Electrónico"

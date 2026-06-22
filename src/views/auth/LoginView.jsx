@@ -12,13 +12,14 @@ export const LoginView = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
-    const [error, setError] = useState(null); 
+    
+    const [error, setError] = useState(null);
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        setError(null);
-
+        setError(null); 
         const users = JSON.parse(localStorage.getItem('bankify_users') || '[]');
+        
         const userFound = users.find((u) => u.email === email && u.password === password);
 
         if (!userFound) {
@@ -39,9 +40,7 @@ export const LoginView = () => {
         console.log('Login success:', userFound);
 
         if (userFound.role === 'admin') {
-            navigate('/admin-dashboard'); 
-        } else {
-            navigate('/app/dashboard');
+            navigate('/app/admin'); 
         }
     };
 
@@ -52,6 +51,7 @@ export const LoginView = () => {
                 <AuthCard title="Accede a tu cuenta" subtitle="Tu banco digital, en cualquier lugar.">
                     <form className="login-form" onSubmit={handleSubmit}>
 
+                        {/* 7. Contenedor visual para mostrar el error si existe */}
                         {error && (
                             <div style={{ color: '#dc3545', fontSize: '14px', textAlign: 'center', marginBottom: '15px', fontWeight: '500' }}>
                                 {error}
