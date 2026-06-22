@@ -1,63 +1,91 @@
-import { useState } from 'react';
-import { IconArrowsRightLeft, IconSend, IconSearch } from '@tabler/icons-react';
+import { useCallback, useEffect, useState } from 'react';
+import { IconArrowsRightLeft, IconExternalLink, IconSend, IconSearch } from '@tabler/icons-react';
 import CustomButton from '../../components/common/CustomButton';
 import DataTable from '../../components/app/DataTable';
 import TransferModal from '../../components/app/TransferModal';
 import SortDropdown from '../../components/app/SortDropdown';
 import './../../assets/css/app/TopView.css';
 
-// TODO: reemplazar por datos del backend (ej: useEffect + fetch a /api/transferences)
-const MOCK_TRANSFERS = [
-    { id: 'TX-001', recipient: 'Laura Ríos', message: '***7733', date: '2026-06-10', amount: 250000 },
-    { id: 'TX-002', recipient: 'Laura Ríos', message: '***7733', date: '2026-06-10', amount: 250000 },
-    { id: 'TX-003', recipient: 'Laura Ríos', message: '***7733', date: '2026-06-10', amount: 250000 },
-    { id: 'TX-004', recipient: 'Laura Ríos', message: '***7733', date: '2026-06-10', amount: 250000 },
-    { id: 'TX-005', recipient: 'Laura Ríos', message: '***7733', date: '2026-06-10', amount: 250000 },
-];
+// ─── Constantes ────────────────────────────────────────────────────────────────
+const TRANSFERS_KEY = 'bankify-transfers';
+const CREDIT_EVAL_URL = import.meta.env.VITE_CREDIT_EVAL_URL;
 
 const SORT_OPTIONS = [
-    { value: 'date-desc', label: 'Más reciente' },
-    { value: 'date-asc', label: 'Más antiguo' },
-    { value: 'amount-desc', label: 'Monto: mayor a menor' },
-    { value: 'amount-asc', label: 'Monto: menor a mayor' },
+    { value: 'date-desc',   label: 'Más reciente'           },
+    { value: 'date-asc',    label: 'Más antiguo'            },
+    { value: 'amount-desc', label: 'Monto: mayor a menor'   },
+    { value: 'amount-asc',  label: 'Monto: menor a mayor'   },
 ];
 
 const sortRows = (rows, sortBy) => {
     const sorted = [...rows];
-
     switch (sortBy) {
-        case 'date-asc':
-            return sorted.sort((a, b) => a.date.localeCompare(b.date));
-        case 'amount-desc':
-            return sorted.sort((a, b) => b.amount - a.amount);
-        case 'amount-asc':
-            return sorted.sort((a, b) => a.amount - b.amount);
+        case 'date-asc':    return sorted.sort((a, b) => a.date.localeCompare(b.date));
+        case 'amount-desc': return sorted.sort((a, b) => b.amount - a.amount);
+        case 'amount-asc':  return sorted.sort((a, b) => a.amount - b.amount);
         case 'date-desc':
-        default:
-            return sorted.sort((a, b) => b.date.localeCompare(a.date));
+        default:            return sorted.sort((a, b) => b.date.localeCompare(a.date));
     }
 };
 
 const formatCurrency = (value) =>
-    new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 }).format(value);
+    new Intl.NumberFormat('es-CO', {
+        style: 'currency',
+        currency: 'COP',
+        maximumFractionDigits: 0,
+    }).format(value);
 
 const COLUMNS = [
-    { key: 'id', label: 'ID' },
+    { key: 'id',        label: 'ID'           },
     { key: 'recipient', label: 'Destinatario' },
-    { key: 'message', label: 'Mensaje' },
-    { key: 'date', label: 'Fecha' },
-    { key: 'amount', label: 'Monto', render: (row) => formatCurrency(row.amount) },
+    { key: 'message',   label: 'Mensaje'      },
+    { key: 'date',      label: 'Fecha'        },
+    { key: 'amount',    label: 'Monto', render: (row) => formatCurrency(row.amount) },
 ];
 
+// ─── Helpers de localStorage ──────────────────────────────────────────────────
+const loadTransfers = () => {
+    try {
+        const stored = localStorage.getItem(TRANSFERS_KEY);
+        return stored ? JSON.parse(stored) : [];
+    } catch {
+        return [];
+    }
+};
+
+// ─── Componente ───────────────────────────────────────────────────────────────
 export const TransferencesView = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [search, setSearch] = useState('');
-    const [sortBy, setSortBy] = useState('date-desc');
+    const [search, setSearch]           = useState('');
+    const [sortBy, setSortBy]           = useState('date-desc');
+    const [transfers, setTransfers]     = useState(loadTransfers);
+
+    // Recarga la lista desde localStorage cada vez que se completa una transferencia
+    const handleTransferComplete = useCallback(() => {
+        setTransfers(loadTransfers());
+    }, []);
+
+    // Sincroniza si otra pestaña modifica localStorage
+    useEffect(() => {
+        const handleStorage = (e) => {
+            if (e.key === TRANSFERS_KEY) setTransfers(loadTransfers());
+        };
+        window.addEventListener('storage', handleStorage);
+        return () => window.removeEventListener('storage', handleStorage);
+    }, []);
 
     const filteredRows = sortRows(
-        MOCK_TRANSFERS.filter((row) => row.recipient.toLowerCase().includes(search.toLowerCase())),
+        transfers.filter((row) =>
+            row.recipient.toLowerCase().includes(search.toLowerCase())
+        ),
         sortBy
     );
+
+    const handleCreditEval = () => {
+        if (CREDIT_EVAL_URL) {
+            window.open(CREDIT_EVAL_URL, '_blank', 'noopener,noreferrer');
+        }
+    };
 
     return (
         <div className="top-view">
@@ -95,9 +123,31 @@ export const TransferencesView = () => {
                 </div>
             </div>
 
-            <DataTable columns={COLUMNS} rows={filteredRows} emptyMessage="No tienes transferencias registradas." />
+            <DataTable
+                columns={COLUMNS}
+                rows={filteredRows}
+                emptyMessage="No tienes transferencias registradas."
+            />
 
-            <TransferModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+            {/* Botón de evaluación de crédito — URL definida en .env */}
+            {CREDIT_EVAL_URL && (
+                <div className="top-credit-eval">
+                    <button
+                        type="button"
+                        className="top-credit-eval-btn"
+                        onClick={handleCreditEval}
+                    >
+                        <IconExternalLink size={16} />
+                        Evaluar Crédito
+                    </button>
+                </div>
+            )}
+
+            <TransferModal
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                onTransferComplete={handleTransferComplete}
+            />
         </div>
     );
 };
