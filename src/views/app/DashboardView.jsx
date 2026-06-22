@@ -5,15 +5,17 @@ import './../../assets/css/app/DashboardView.css';
 import { useState } from 'react';
 
 import CreditModal from "../../components/app/Creditmodal";
-import TransferModal from "../../components/app/Transfermodal";
-
-// TODO: reemplazar por el nombre real del usuario autenticado
-const MOCK_USER_NAME = 'Elián';
+import TransferModal from "../../components/app/TransferModal";
 
 export const DashboardView = () => {
     const [modalForm, setModalForm] = useState(null);
-        
+
     const navigate = useNavigate();
+
+    const sessionUser = localStorage.getItem('bankify_current_user');
+    const user = sessionUser ? JSON.parse(sessionUser) : null;
+    const userName = user ? user.fullName : 'Invitado';
+
     const actions = [
         {
             icon: IconClipboardList,
@@ -43,8 +45,7 @@ export const DashboardView = () => {
 
     return (
         <div className="dashboard-view">
-            <h1 className="dashboard-greeting">{MOCK_USER_NAME}, ¿Qué quieres hacer hoy?</h1>
-
+            <h1 className="dashboard-greeting">{userName}, ¿Qué quieres hacer hoy?</h1>
             <div className="dashboard-actions-grid">
                 {actions.map((action) => (
                     <ActionCard key={action.title} {...action} />
