@@ -1,5 +1,6 @@
 import { lazy, Suspense } from "react";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useLocation } from "react-router-dom";
+import NavBar from "./components/common/NavBar";
 
 // Landing views (home & auth)
 const HomeView = lazy(() => import("./views/HomeView"));
@@ -14,8 +15,10 @@ const CreditsView = lazy(() => import("./views/app/CreditsView"));
 const AdminView = lazy(() => import("./views/app/AdminView"));
 
 const Router = () => {
+  const location = useLocation();
   return (
     <Suspense fallback={<h1>Cargando...</h1>}> {/* Crear luego un loader para esto */}
+      <NavBar key={location.pathname + location.search} />
       <Routes>
         {/* Landing (home & auth) */}
         <Route path="/" index element={<HomeView />} />

@@ -1,13 +1,12 @@
-import CustomButton from "../common/CustomButton";
 import logoBankify from "../../assets/img/Logo.webp";
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
+import CustomButton from "../common/CustomButton";
 
 import "../../assets/css/common/NavBar.css";
 
 export const Navbar = () => {
     const navigate = useNavigate();
-
-    // 1. Revisar si hay un usuario con sesión activa en el navegador
+    useLocation(); 
     const sessionUser = localStorage.getItem('bankify_current_user');
     const user = sessionUser ? JSON.parse(sessionUser) : null;
 
@@ -19,7 +18,6 @@ export const Navbar = () => {
         navigate("/auth/register");
     };
 
-    // 2. Función para borrar la sesión y sacarlo de la app
     const handleLogout = () => {
         localStorage.removeItem('bankify_current_user');
         navigate("/auth/login");
@@ -29,31 +27,44 @@ export const Navbar = () => {
         <nav className="bankify-navbar">
             <div className="navbar-container">
 
-                <div className="navbar-left" style={{ display: 'flex', alignItems: 'center', gap: '30px' }}>
-                    <div className="navbar-logo" onClick={() => navigate('/')} style={{ cursor: 'pointer' }}>
-                        <img src={logoBankify} alt="Logo Bankify" />
-                    </div>
-
-                    {/* ENLACES DINÁMICOS: Solo aparecen si el usuario inició sesión */}
-                    {user && (
-                        <div className="navbar-links" style={{ display: 'flex', gap: '20px' }}>
-                            <Link to="/app/dashboard" style={{ textDecoration: 'none', color: 'var(--text-main)', fontWeight: '500' }}>
-                                Página Principal
-                            </Link>
-                            {user.role === 'client' && (
-                                <Link to="/app/transferences" style={{ textDecoration: 'none', color: 'var(--text-main)', fontWeight: '500' }}>
-                                    Transacciones
-                                </Link>
-                            )}
-                        </div>
-                    )}
+                {/* Logo original */}
+                <div className="navbar-logo" onClick={() => navigate('/')} style={{ cursor: 'pointer' }}>
+                    <img src={logoBankify} alt="Logo Bankify" />
                 </div>
+
+                {user && (
+                    <div className="navbar-links">
+                        <Link to="/app/dashboard" className="navbar-link-item">
+                            Página Principal
+                        </Link>
+                        {user.role === 'client' && (
+                            <>
+                                <Link to="/app/credits" className="navbar-link-item">
+                                    Créditos
+                                </Link>
+                                <Link to="/app/transferences" className="navbar-link-item">
+                                    Transferencias
+                                </Link>
+                            </>
+                        )}
+                        {user.role === 'admin' && (
+                            <Link to="/app/admin" className="navbar-link-item">
+                                Panel Admin
+                            </Link>
+                        )}
+                    </div>
+                )}
 
                 <div className="navbar-actions">
                     {user ? (
-                        // ESTADO A: Si hay usuario, muestra su nombre y el botón de Cerrar Sesión
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
-                            <span style={{ fontSize: '14px', fontWeight: 'bold', color: 'var(--text-main)' }}>
+                        <div className="navbar-user-profile">
+                            <div className="navbar-avatar-container">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="icon-user-avatar">
+                                    <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
+                                    <circle cx="12" cy="7" r="4"></circle>
+                                </svg>
+                            </div>
+                            <span className="navbar-user-name">
                                 {user.fullName}
                             </span>
                             <CustomButton variant="outline" onClick={handleLogout}>
@@ -61,7 +72,7 @@ export const Navbar = () => {
                             </CustomButton>
                         </div>
                     ) : (
-                        // ESTADO B: Si NO hay usuario, muestra los botones originales de Juan Pablo
+                        /* ESTADO PÚBLICO: Botones limpios originales de Juan Pablo */
                         <>
                             <CustomButton variant="outline" onClick={handleLoginRedirect}>
                                 Iniciar Sesión

@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { IconMail, IconLock, IconEye, IconEyeOff } from '@tabler/icons-react';
 import { AuthCard } from '../../components/auth/AuthCard';
 import { InputField } from '../../components/auth/InputField';
-import Navbar from '../../components/common/NavBar';
 
 import "./../../assets/css/auth/RegisterView.css"
 import "./../../assets/css/auth/LoginView.css"
@@ -45,7 +44,7 @@ export const RegisterView = () => {
         
         if (!isBugFixed) {
             alert('¡Cuenta creada con éxito! Sin embargo, el sistema presenta un error de correlación de datos. No podrás iniciar sesión hasta que el Administrador cargue el archivo de estadística.');
-            navigate('/login'); // Lo mandamos al login para que vea el bloqueo si intenta entrar
+            navigate('/auth/login');
         } else {
             localStorage.setItem('bankify_current_user', JSON.stringify(newUser));
             navigate('/app/dashboard');
@@ -54,7 +53,6 @@ export const RegisterView = () => {
 
     return (
         <>
-            <Navbar></Navbar>
             <div className="register-page">
                 <AuthCard title="Crea tu cuenta" subtitle="Completa tu información para unirte al sistema">
                     <form className="register-form" onSubmit={handleSubmit}>

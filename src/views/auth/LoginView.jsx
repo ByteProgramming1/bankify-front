@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { IconMail, IconLock, IconEye, IconEyeOff } from '@tabler/icons-react';
 import { AuthCard } from '../../components/auth/AuthCard';
 import { InputField } from '../../components/auth/InputField';
-import Navbar from '../../components/common/NavBar';
 
 import "./../../assets/css/auth/LoginView.css"
 
@@ -41,17 +40,17 @@ export const LoginView = () => {
 
         if (userFound.role === 'admin') {
             navigate('/app/admin'); 
+        } else {
+            navigate("/app/dashboard");
         }
     };
 
     return (
         <>
-            <Navbar></Navbar>
             <div className="login-page">
                 <AuthCard title="Accede a tu cuenta" subtitle="Tu banco digital, en cualquier lugar.">
                     <form className="login-form" onSubmit={handleSubmit}>
 
-                        {/* 7. Contenedor visual para mostrar el error si existe */}
                         {error && (
                             <div style={{ color: '#dc3545', fontSize: '14px', textAlign: 'center', marginBottom: '15px', fontWeight: '500' }}>
                                 {error}

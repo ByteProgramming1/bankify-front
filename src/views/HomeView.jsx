@@ -1,4 +1,3 @@
-import NavBar from "../components/common/NavBar"
 import CTA from "../components/landing/CTA"
 import Feat from "../components/landing/Feat"
 import Footer from "../components/landing/Footer"
@@ -9,7 +8,6 @@ import Ratings from "../components/landing/Ratings"
 const HomeView = () => {
     return (
         <div>
-            <NavBar />
             <Hero />
             <Feat />
             <Metrics />
