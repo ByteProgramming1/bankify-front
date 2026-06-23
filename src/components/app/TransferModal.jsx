@@ -1,50 +1,126 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { IconArrowRight, IconCurrencyDollar } from '@tabler/icons-react';
 import Modal from '../common/Modal';
 import AccountSummaryCard from './AccountSummaryCard';
-import './../../assets/css/common/Modal.css';
 
-// TODO: reemplazar por datos reales (cuenta del usuario autenticado y lista de
-// contactos/destinatarios) cuando exista integración con el backend.
-const MOCK_ORIGIN_ACCOUNT = {
+// ─── Claves de localStorage ────────────────────────────────────────────────────
+const TRANSFERS_KEY = 'bankify-transfers';
+const BALANCE_KEY   = 'bankify-balance';
+const ADMIN_STATUS_KEY = 'admin-modules-status';
+
+// ID del módulo admin que controla las transferencias
+const TRANSFER_MODULE_ID = 'mod-4';
+
+// ─── Cuenta origen por defecto ────────────────────────────────────────────────
+const ORIGIN_ACCOUNT = {
     label: 'CUENTA ORIGEN',
     name: 'Elián Ibarra',
     accountInfo: 'Cuenta Corriente · **** 4821',
-    balance: 4850000,
 };
 
+const INITIAL_BALANCE = 4850000;
+
 const MOCK_RECIPIENTS = [
-    { id: 'rec-1', name: 'Laura Ríos', accountInfo: 'Cuenta Corriente · **** 7733', balance: 1250000 },
-    { id: 'rec-2', name: 'Andrés Suárez', accountInfo: 'Cuenta de Ahorros · **** 2210', balance: 980000 },
+    { id: 'rec-1', name: 'Laura Ríos',     accountInfo: 'Cuenta Corriente · **** 7733', balance: 1250000 },
+    { id: 'rec-2', name: 'Andrés Suárez',  accountInfo: 'Cuenta de Ahorros · **** 2210', balance: 980000  },
 ];
 
-/**
- * Modal de "Nueva Transferencia". Se abre desde TransferencesView.
- *
- * @param {boolean} isOpen
- * @param {() => void} onClose
- * @param {(transfer: object) => void} [onSubmit] - Callback al confirmar (de momento solo loguea/cierra).
- */
-export const TransferModal = ({ isOpen, onClose, onSubmit }) => {
+// ─── Helpers de localStorage ──────────────────────────────────────────────────
+const getBalance = () => {
+    try {
+        const stored = localStorage.getItem(BALANCE_KEY);
+        return stored !== null ? Number(stored) : INITIAL_BALANCE;
+    } catch {
+        return INITIAL_BALANCE;
+    }
+};
+
+const saveBalance = (value) => {
+    try { localStorage.setItem(BALANCE_KEY, String(value)); } catch { /* noop */ }
+};
+
+const getTransfers = () => {
+    try {
+        const stored = localStorage.getItem(TRANSFERS_KEY);
+        return stored ? JSON.parse(stored) : [];
+    } catch {
+        return [];
+    }
+};
+
+const saveTransfer = (transfer) => {
+    try {
+        const transfers = getTransfers();
+        transfers.unshift(transfer); // más reciente primero
+        localStorage.setItem(TRANSFERS_KEY, JSON.stringify(transfers));
+    } catch { /* noop */ }
+};
+
+const isTransferModuleFixed = () => {
+    try {
+        const stored = localStorage.getItem(ADMIN_STATUS_KEY);
+        if (!stored) return false;
+        const statusMap = JSON.parse(stored);
+        return statusMap[TRANSFER_MODULE_ID] === 'completado';
+    } catch {
+        return false;
+    }
+};
+
+const formatCurrency = (value) =>
+    new Intl.NumberFormat('es-CO', {
+        style: 'currency',
+        currency: 'COP',
+        maximumFractionDigits: 0,
+    }).format(value);
+
+// ─── Componente ───────────────────────────────────────────────────────────────
+export const TransferModal = ({ isOpen, onClose, onTransferComplete }) => {
     const [recipientId, setRecipientId] = useState(MOCK_RECIPIENTS[0]?.id ?? '');
-    const [amount, setAmount] = useState('');
-    const [message, setMessage] = useState('');
+    const [amount, setAmount]           = useState('');
+    const [message, setMessage]         = useState('');
+    const [balance, setBalance]         = useState(getBalance);
+
+    // Sincroniza el saldo al abrir el modal
+    useEffect(() => {
+        if (isOpen) setBalance(getBalance());
+    }, [isOpen]);
 
     const recipient = MOCK_RECIPIENTS.find((r) => r.id === recipientId) ?? MOCK_RECIPIENTS[0];
 
     const handleSubmit = (e) => {
         e.preventDefault();
 
+        const amountValue = Number(amount);
+        const isFixed = isTransferModuleFixed();
+
+        let newBalance;
+
+        if (isFixed) {
+            // ✅ Lógica CORRECTA: restar el monto de la cuenta origen
+            newBalance = balance - amountValue;
+        } else {
+            // ❌ BUG INTENCIONAL: suma el monto en vez de restarlo
+            // El saldo aumenta cuando debería disminuir
+            newBalance = balance + amountValue;
+        }
+
+        saveBalance(newBalance);
+        setBalance(newBalance);
+
         const transfer = {
-            recipientId,
-            amount: Number(amount),
-            message,
+            id: `TX-${Date.now()}`,
+            recipient: recipient.name,
+            message: message || '—',
+            date: new Date().toISOString().split('T')[0],
+            amount: amountValue,
         };
 
-        // TODO: integrar con el endpoint real de transferencias
-        console.log('Nueva transferencia:', transfer);
+        saveTransfer(transfer);
+        onTransferComplete?.();
 
-        onSubmit?.(transfer);
+        setAmount('');
+        setMessage('');
         onClose?.();
     };
 
@@ -54,11 +130,27 @@ export const TransferModal = ({ isOpen, onClose, onSubmit }) => {
             <p className="modal-subtitle">Mueve tus fondos a otra cuenta de forma segura</p>
 
             <div className="modal-accounts">
-                <AccountSummaryCard {...MOCK_ORIGIN_ACCOUNT} />
+                <AccountSummaryCard
+                    {...ORIGIN_ACCOUNT}
+                    balance={balance}
+                />
                 <span className="modal-arrow">
                     <IconArrowRight size={16} />
                 </span>
-                {recipient && <AccountSummaryCard label="CUENTA DESTINO" {...recipient} />}
+                {recipient && (
+                    <AccountSummaryCard
+                        label="CUENTA DESTINO"
+                        name={recipient.name}
+                        accountInfo={recipient.accountInfo}
+                        balance={recipient.balance}
+                    />
+                )}
+            </div>
+
+            {/* Saldo actual destacado — el usuario lo verá cambiar incorrectamente */}
+            <div className="modal-balance-banner">
+                <span className="modal-balance-label">Saldo disponible en tu cuenta</span>
+                <span className="modal-balance-value">{formatCurrency(balance)}</span>
             </div>
 
             <form className="modal-form" onSubmit={handleSubmit}>
@@ -85,8 +177,8 @@ export const TransferModal = ({ isOpen, onClose, onSubmit }) => {
                         <input
                             id="amount"
                             type="number"
-                            min="0"
-                            step="50"
+                            min="1"
+                            step="1"
                             placeholder="0"
                             value={amount}
                             onChange={(e) => setAmount(e.target.value)}
