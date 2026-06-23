@@ -38,6 +38,10 @@
 
     font-family: "DM Sans", sans-serif;
     font-optical-sizing: auto;
+
+    --success-bg: var(--white-main);
+    --success-border: var(--green-main);
+    --success-text: var(--green-main);
 }
 
 body {
@@ -50,4 +54,24 @@ body {
     padding: 0 24px;
     display: flex;
     flex-direction: column;
+}
+
+.custom-toast {
+    background: var(--white-main) !important;
+    border: 1px solid var(--gray-border) !important;
+    color: var(--text-main) !important;
+    font-family: "DM Sans", sans-serif !important;
+    font-size: 17px;
+}
+
+.custom-toast--success {
+    background: var(--green-light-2) !important;
+    border-color: var(--green-main) !important;
+    color: var(--green-main) !important;
+}
+
+.custom-toast--error {
+    background: var(--red-light) !important;
+    border-color: var(--red-main) !important;
+    color: var(--red-main) !important;
 }

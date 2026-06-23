@@ -7,8 +7,8 @@ export const MOCK_USERS = [
     fullName: 'Administrador del Sistema'
   },
   {
-    email: 'cliente@bankify.com',
-    password: 'user123',
+    email: 'carlosmendoza@bankify.com',
+    password: 'carlitos123%&',
     role: 'client',
     fullName: 'Carlos Mendoza'
   }
@@ -27,6 +27,9 @@ export const initAuthStorage = () => {
   }
   if (!localStorage.getItem('bug_correlacion_fixed')) {
     localStorage.setItem('bug_correlacion_fixed', 'false');
+  }
+  if (!localStorage.getItem('bug_captcha_fixed')) {
+    localStorage.setItem('bug_captcha_fixed', 'false');
   }
 };
 
@@ -49,4 +52,8 @@ export const getCurrentUser = () => {
  */
 export const isBugFixed = () => {
   return localStorage.getItem('bug_correlacion_fixed') === 'true';
+};
+
+export const isCaptchaFixed = () => {
+  return localStorage.getItem('bug_captcha_fixed') === 'true';
 };

@@ -24,7 +24,6 @@ export const AdminCard = ({
     const handleFileChange = (slot) => (e) => {
         const file = e.target.files?.[0];
         if (!file) return;
-
         onFileUpload?.(slot.id, file.name);
     };
 
@@ -32,7 +31,9 @@ export const AdminCard = ({
         <div className={`admin-card ${isCardCompleted ? 'admin-card-completed' : ''}`}>
             <div className="admin-card-header">
                 <div className="admin-card-title-group">
-                    <span className="admin-card-icon">{Icon && <Icon size={24} stroke={2.2} />}</span>
+                    <span className="admin-card-icon">
+                        {Icon && <Icon size={24} stroke={2.2} />}
+                    </span>
                     <div>
                         <h2>{title}</h2>
                         <span className="admin-card-team">{team}</span>
@@ -51,10 +52,14 @@ export const AdminCard = ({
                 </div>
             </div>
 
+            {/* Botón de descarga — solo se muestra si se pasa downloadAction */}
             {downloadAction && (
-                <CustomButton variant="solid" onClick={downloadAction.onClick}>
-                    {downloadAction.label} <IconDownload size={16} stroke={2.2} />
-                </CustomButton>
+                <div className="admin-card-download">
+                    <CustomButton variant="solid" onClick={downloadAction.onClick}>
+                        <IconDownload size={15} stroke={2.2} />
+                        {downloadAction.label}
+                    </CustomButton>
+                </div>
             )}
 
             <div className="admin-card-uploads">
