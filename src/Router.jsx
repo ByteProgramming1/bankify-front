@@ -3,6 +3,7 @@ import { Route, Routes, Navigate, useLocation } from "react-router-dom";
 import { getCurrentUser } from "./utils/authUtils";
 import NavBar from "./components/common/NavBar";
 import { Toaster } from "sonner";
+import AppLoader from "./components/common/AppLoader";
 
 // Landing views (home & auth)
 const HomeView = lazy(() => import("./views/HomeView"));
@@ -35,7 +36,7 @@ const AdminGuard = ({ children }) => {
 const Router = () => {
   const location = useLocation();
   return (
-    <Suspense fallback={<h1>Cargando...</h1>}> {/* Crear luego un loader para esto */}
+    <Suspense fallback={<AppLoader text="Cargando..." />}>
       <NavBar key={location.pathname + location.search} />
       <Routes>
         {/* Landing (home & auth) */}
