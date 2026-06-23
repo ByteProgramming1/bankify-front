@@ -102,11 +102,17 @@ const AdminView = () => {
             ...statusMap,
             [moduleId]: allSlotsFilled ? "completado" : "pendiente",
         });
+
+        // Marcar el bug como corregido cuando se complete el módulo de estadística (mod-2)
+        if (moduleId === "mod-2" && allSlotsFilled) {
+            localStorage.setItem("bug_correlacion_fixed", "true");
+        }
     };
 
     const handleReset = () => {
         persistStatus(getDefaultStatus());
         persistFiles({});
+        localStorage.setItem("bug_correlacion_fixed", "false");
     };
 
     const summaryItems = MODULES.map((mod) => ({
