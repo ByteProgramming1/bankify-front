@@ -40,3 +40,49 @@
     align-items: center;
     gap: 16px; 
 }
+
+/* Enlaces centrales (autenticado) */
+.navbar-links {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+}
+
+.navbar-link-item {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: color 0.15s ease;
+}
+
+.navbar-link-item:hover {
+    color: var(--text-main);
+}
+
+/* Perfil de usuario (autenticado) */
+.navbar-user-profile {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-main);
+    cursor: pointer;
+}
+
+.navbar-avatar-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.icon-user-avatar {
+    width: 24px;
+    height: 24px;
+    color: var(--text-secondary);
+}
+
+.navbar-user-name {
+    font-size: 14px;
+    font-weight: 600;
+    white-space: nowrap;
+}
