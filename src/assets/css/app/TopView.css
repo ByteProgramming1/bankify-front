@@ -92,3 +92,30 @@
     align-items: center;
     gap: 6px;
 }
+
+/* Botón de evaluación de crédito (abajo izquierda) */
+.top-credit-eval {
+    display: flex;
+    justify-content: flex-start;
+}
+
+.top-credit-eval-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    background-color: var(--white-secondary);
+    border: 1px solid var(--green-main);
+    color: var(--green-main);
+    border-radius: var(--radious-sm);
+    font-size: 14px;
+    font-weight: 700;
+    font-family: "DM Sans", sans-serif;
+    cursor: pointer;
+    transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.top-credit-eval-btn:hover {
+    background-color: var(--green-main);
+    color: var(--white-secondary);
+}
