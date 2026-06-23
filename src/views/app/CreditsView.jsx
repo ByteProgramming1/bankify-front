@@ -1,117 +1,102 @@
+import { useCallback, useEffect, useState } from "react";
 import { IconClipboardText, IconClipboardPlus, IconSearch } from "@tabler/icons-react"
 import CustomButton from "../../components/common/CustomButton"
-import { useState } from "react";
-import './../../assets/css/app/TopView.css';
 import SortDropdown from "../../components/app/SortDropdown";
 import DataTable from "../../components/app/DataTable";
 import CreditModal from "../../components/app/Creditmodal";
+import './../../assets/css/app/TopView.css';
 
-const MOCK_CREDITS = [
-    {
-        id: 'CR-001',
-        purpose: 'Compra de vehículo',
-        date: '2026-06-10',
-        amount: 25000000,
-        status: 'en revision',
-        incomes: 5700000,
-    },
-    {
-        id: 'CR-002',
-        purpose: 'Remodelación de vivienda',
-        date: '2026-06-08',
-        amount: 15000000,
-        status: 'aprobado',
-        incomes: 3800000,
-    },
-    {
-        id: 'CR-003',
-        purpose: 'Consolidación de deudas',
-        date: '2026-06-05',
-        amount: 8000000,
-        status: 'rechazado',
-        incomes: 4400000,
-    },
-    {
-        id: 'CR-004',
-        purpose: 'Capital de trabajo',
-        date: '2026-06-12',
-        amount: 12000000,
-        status: 'ingresos',
-        incomes: 9200000,
-    },
-    {
-        id: 'CR-005',
-        purpose: 'Educación',
-        date: '2026-06-15',
-        amount: 6000000,
-        status: 'en revision',
-        incomes: 5000000,
-    },
-    {
-        id: 'CR-006',
-        purpose: 'Compra de maquinaria',
-        date: '2026-06-01',
-        amount: 30000000,
-        status: 'aprobado',
-        incomes: 14000000,
-    },
-    {
-        id: 'CR-007',
-        purpose: 'Libre inversión',
-        date: '2026-05-28',
-        amount: 5000000,
-        status: 'rechazado',
-        incomes: 3000000,
-    },
-];
+// ─── Constantes ────────────────────────────────────────────────────────────────
+const CREDITS_KEY = 'bankify-credits';
 
 const SORT_OPTIONS = [
-    { value: 'date-desc', label: 'Más reciente' },
-    { value: 'date-asc', label: 'Más antiguo' },
+    { value: 'date-desc',   label: 'Más reciente'         },
+    { value: 'date-asc',    label: 'Más antiguo'          },
     { value: 'amount-desc', label: 'Monto: mayor a menor' },
-    { value: 'amount-asc', label: 'Monto: menor a mayor' },
+    { value: 'amount-asc',  label: 'Monto: menor a mayor' },
 ];
 
 const sortRows = (rows, sortBy) => {
     const sorted = [...rows];
-
     switch (sortBy) {
-        case 'date-asc':
-            return sorted.sort((a, b) => a.date.localeCompare(b.date));
-        case 'amount-desc':
-            return sorted.sort((a, b) => b.amount - a.amount);
-        case 'amount-asc':
-            return sorted.sort((a, b) => a.amount - b.amount);
+        case 'date-asc':    return sorted.sort((a, b) => a.date.localeCompare(b.date));
+        case 'amount-desc': return sorted.sort((a, b) => b.amount - a.amount);
+        case 'amount-asc':  return sorted.sort((a, b) => a.amount - b.amount);
         case 'date-desc':
-        default:
-            return sorted.sort((a, b) => b.date.localeCompare(a.date));
+        default:            return sorted.sort((a, b) => b.date.localeCompare(a.date));
     }
 };
 
 const formatCurrency = (value) =>
-    new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 }).format(value);
+    new Intl.NumberFormat('es-CO', {
+        style: 'currency',
+        currency: 'COP',
+        maximumFractionDigits: 0,
+    }).format(value);
+
+const STATUS_CONFIG = {
+    'pending': { label: 'En Revisión', className: 'credit-status--pending'  },
+    'approved':    { label: 'Aprobado',    className: 'credit-status--approved' },
+    'denied':   { label: 'Rechazado',   className: 'credit-status--rejected' },
+};
 
 const COLUMNS = [
-    { key: 'id', label: 'ID' },
+    { key: 'id',      label: 'ID'        },
     { key: 'purpose', label: 'Propósito' },
-    { key: 'date', label: 'Fecha' },
+    { key: 'date',    label: 'Fecha'     },
+    { key: 'amount',  label: 'Monto',    render: (row) => formatCurrency(row.amount)  },
     { key: 'incomes', label: 'Ingresos', render: (row) => formatCurrency(row.incomes) },
-    { key: 'amount', label: 'Monto', render: (row) => formatCurrency(row.amount) },
+    {
+        key: 'status',
+        label: 'Estado',
+        render: (row) => {
+            const config = STATUS_CONFIG[row.status] ?? { label: row.status, className: 'credit-status--pending' };
+            return (
+                <span className={`credit-status ${config.className}`}>
+                    {config.label}
+                </span>
+            );
+        }
+    },
 ];
 
+// ─── Helpers de localStorage ──────────────────────────────────────────────────
+const loadCredits = () => {
+    try {
+        const stored = localStorage.getItem(CREDITS_KEY);
+        return stored ? JSON.parse(stored) : [];
+    } catch {
+        return [];
+    }
+};
+
+// ─── Componente ───────────────────────────────────────────────────────────────
 const CreditsView = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [search, setSearch] = useState('');
-    const [sortBy, setSortBy] = useState('date-desc');
+    const [search, setSearch]           = useState('');
+    const [sortBy, setSortBy]           = useState('date-desc');
+    const [credits, setCredits]         = useState(loadCredits);
+
+    const handleCreditComplete = useCallback(() => {
+        setCredits(loadCredits());
+    }, []);
+
+    useEffect(() => {
+        const handleStorage = (e) => {
+            if (e.key === CREDITS_KEY) setCredits(loadCredits());
+        };
+        window.addEventListener('storage', handleStorage);
+        return () => window.removeEventListener('storage', handleStorage);
+    }, []);
 
     const filteredRows = sortRows(
-        MOCK_CREDITS.filter(
-            (row) =>
-                row.purpose.toLowerCase().includes(search.toLowerCase()) ||
-                row.amount.toString().toLowerCase().includes(search.toLowerCase())
+        credits.filter((row) =>
+            row.purpose.toLowerCase().includes(search.toLowerCase()) ||
+            row.amount.toString().includes(search)
         ),
         sortBy
     );
+
     return (
         <div className="top-view">
             <div className="top-header">
@@ -131,6 +116,7 @@ const CreditsView = () => {
                     </span>
                 </CustomButton>
             </div>
+
             <div className="top-toolbar">
                 <div className="top-search">
                     <IconSearch size={18} className="top-search-icon" />
@@ -150,15 +136,16 @@ const CreditsView = () => {
             <DataTable
                 columns={COLUMNS}
                 rows={filteredRows}
-                emptyMessage="No tienes créditos solicitados"
+                emptyMessage="No tienes créditos solicitados."
             />
-            
+
             <CreditModal
                 isOpen={isModalOpen}
                 onClose={() => setIsModalOpen(false)}
+                onCreditComplete={handleCreditComplete}
             />
         </div>
-    )
-}
+    );
+};
 
-export default CreditsView
+export default CreditsView;

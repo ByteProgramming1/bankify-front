@@ -2,6 +2,7 @@ import { lazy, Suspense } from "react";
 import { Route, Routes, Navigate, useLocation } from "react-router-dom";
 import { getCurrentUser } from "./utils/authUtils";
 import NavBar from "./components/common/NavBar";
+import { Toaster } from "sonner";
 
 // Landing views (home & auth)
 const HomeView = lazy(() => import("./views/HomeView"));
@@ -56,6 +57,16 @@ const Router = () => {
         {/* NOT FOUND */}
         <Route path="*" element={<h1>ERROR 404, NOT FOUND</h1>} />
       </Routes>
+      <Toaster
+        position="top-center"
+        toastOptions={{
+          classNames: {
+            toast:   'custom-toast',
+            success: 'custom-toast--success',
+            error:   'custom-toast--error',
+          }
+        }}
+      />
     </Suspense>
   )
 }
