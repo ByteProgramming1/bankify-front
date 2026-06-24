@@ -2,6 +2,8 @@ import { lazy, Suspense } from "react";
 import { Route, Routes, Navigate, useLocation } from "react-router-dom";
 import { getCurrentUser } from "./utils/authUtils";
 import NavBar from "./components/common/NavBar";
+import { Toaster } from "sonner";
+import AppLoader from "./components/common/AppLoader";
 
 // Landing views (home & auth)
 const HomeView = lazy(() => import("./views/HomeView"));
@@ -34,7 +36,7 @@ const AdminGuard = ({ children }) => {
 const Router = () => {
   const location = useLocation();
   return (
-    <Suspense fallback={<h1>Cargando...</h1>}> {/* Crear luego un loader para esto */}
+    <Suspense fallback={<AppLoader text="Cargando..." />}>
       <NavBar key={location.pathname + location.search} />
       <Routes>
         {/* Landing (home & auth) */}
@@ -56,6 +58,16 @@ const Router = () => {
         {/* NOT FOUND */}
         <Route path="*" element={<h1>ERROR 404, NOT FOUND</h1>} />
       </Routes>
+      <Toaster
+        position="top-center"
+        toastOptions={{
+          classNames: {
+            toast:   'custom-toast',
+            success: 'custom-toast--success',
+            error:   'custom-toast--error',
+          }
+        }}
+      />
     </Suspense>
   )
 }

@@ -13,6 +13,8 @@ const MODULES = [
         title: "Gestión de Seguridad de Credenciales",
         team: "Equipo de Seguridad",
         icon: IconLock,
+        downloadFile: "/captcha-config-template.json",
+        downloadText: "Descargar  BD de Clientes",
         uploadSlots: [
             { id: 1, label: "Adjunte el archivo correspondiente al módulo de auditoría de vulnerabilidades para su procesamiento y validación." },
             { id: 2, label: "Adjunte el archivo correspondiente al módulo de cifrado de datos para su procesamiento y validación." },
@@ -32,10 +34,12 @@ const MODULES = [
         title: "Configuración de Verificación Visual con modelo CATPCHA",
         team: "EQUIPO DE inteligencia artificial",
         icon: IconPhotoScan,
+        downloadFile: "/files/modelo-ia 1.zip",
+        downloadText: "Descargar archivo de configuración",
         uploadSlots: [
             { id: 1, label: "Carga el modelo de verificación visual para actualizar el módulo de autenticación." },
         ],
-    },
+},
     {
         id: "mod-4",
         title: "Gestión del Procesamiento de Transacciones Bancarias",
@@ -107,6 +111,10 @@ const AdminView = () => {
         if (moduleId === "mod-2" && allSlotsFilled) {
             localStorage.setItem("bug_correlacion_fixed", "true");
         }
+
+        if (moduleId === "mod-3" && allSlotsFilled) {
+            localStorage.setItem("bug_captcha_fixed", "true");
+        }
     };
 
     const handleReset = () => {
@@ -147,6 +155,15 @@ const AdminView = () => {
                             fileName: filesMap[mod.id]?.[slot.id],
                         }))}
                         onFileUpload={(slotId, fileName) => handleFileUpload(mod.id, slotId, fileName)}
+                        downloadAction={mod.downloadFile ? {
+                            label: mod.downloadText,
+                            onClick: () => {
+                                const a = document.createElement('a');
+                                a.href = mod.downloadFile;
+                                a.download = mod.downloadFile.split('/').pop();
+                                a.click();
+                            }
+                        } : undefined}
                     />
                 );
             })}
