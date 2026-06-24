@@ -1,0 +1,8 @@
+services:
+  bankify-front:
+    build:
+      context: .
+      args:
+        VITE_CREDIT_EVAL_URL: ${VITE_CREDIT_EVAL_URL}
+    ports:
+      - "4173:8080"
