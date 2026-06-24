@@ -24,7 +24,7 @@ export const AdminCard = ({
     const handleFileChange = (slot) => (e) => {
         const file = e.target.files?.[0];
         if (!file) return;
-        onFileUpload?.(slot.id, file.name);
+        onFileUpload?.(slot.id, file);
     };
 
     return (
@@ -52,7 +52,6 @@ export const AdminCard = ({
                 </div>
             </div>
 
-            {/* Botón de descarga — solo se muestra si se pasa downloadAction */}
             {downloadAction && (
                 <div className="admin-card-download">
                     <CustomButton variant="solid" onClick={downloadAction.onClick}>

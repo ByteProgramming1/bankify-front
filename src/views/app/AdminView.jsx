@@ -7,14 +7,23 @@ import TopAdmin from "../../components/admin/TopAdmin";
 const STORAGE_KEY = "admin-modules-status";
 const FILES_KEY = "admin-modules-files";
 
+// Archivos que sirve mod-1 según el estado del bug de seguridad
+const USERS_FILE_INSECURE = "/files/users.json";         // passwords en texto plano
+const USERS_FILE_SECURE   = "/files/users_hashed.json";  // passwords hasheadas
+
+// El bug de seguridad se considera "corregido" cuando mod-1 está completado
+// (sus 2 archivos de corrección fueron subidos)
+const isSecurityBugFixed = (statusMap) =>
+    statusMap["mod-1"] === "completado";
+
 const MODULES = [
     {
         id: "mod-1",
         title: "Gestión de Seguridad de Credenciales",
         team: "Equipo de Seguridad",
         icon: IconLock,
-        downloadFile: "/captcha-config-template.json",
-        downloadText: "Descargar  BD de Clientes",
+        // downloadFile se resuelve dinámicamente en el render, no aquí
+        downloadText: "Descargar BD de Clientes",
         uploadSlots: [
             { id: 1, label: "Adjunte el archivo correspondiente al módulo de auditoría de vulnerabilidades para su procesamiento y validación." },
             { id: 2, label: "Adjunte el archivo correspondiente al módulo de cifrado de datos para su procesamiento y validación." },
@@ -39,7 +48,7 @@ const MODULES = [
         uploadSlots: [
             { id: 1, label: "Carga el modelo de verificación visual para actualizar el módulo de autenticación." },
         ],
-},
+    },
     {
         id: "mod-4",
         title: "Gestión del Procesamiento de Transacciones Bancarias",
@@ -68,29 +77,24 @@ const loadFromStorage = (key, fallback) => {
 };
 
 const AdminView = () => {
-    // Lazy init: se ejecuta solo una vez, al montar, sin pasar por un efecto
     const [statusMap, setStatusMap] = useState(() => loadFromStorage(STORAGE_KEY, getDefaultStatus()));
     const [filesMap, setFilesMap] = useState(() => loadFromStorage(FILES_KEY, {}));
 
     const persistStatus = (next) => {
         setStatusMap(next);
-        try {
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
-        } catch (err) {
-            console.error("Error guardando status:", err);
-        }
+        try { localStorage.setItem(STORAGE_KEY, JSON.stringify(next)); }
+        catch (err) { console.error("Error guardando status:", err); }
     };
 
     const persistFiles = (next) => {
         setFilesMap(next);
-        try {
-            localStorage.setItem(FILES_KEY, JSON.stringify(next));
-        } catch (err) {
-            console.error("Error guardando archivos:", err);
-        }
+        try { localStorage.setItem(FILES_KEY, JSON.stringify(next)); }
+        catch (err) { console.error("Error guardando archivos:", err); }
     };
 
-    const handleFileUpload = (moduleId, slotId, fileName) => {
+    const handleFileUpload = (moduleId, slotId, file) => {
+        const fileName = file.name;
+
         const nextFiles = {
             ...filesMap,
             [moduleId]: { ...(filesMap[moduleId] ?? {}), [slotId]: fileName },
@@ -107,11 +111,9 @@ const AdminView = () => {
             [moduleId]: allSlotsFilled ? "completado" : "pendiente",
         });
 
-        // Marcar el bug como corregido cuando se complete el módulo de estadística (mod-2)
         if (moduleId === "mod-2" && allSlotsFilled) {
             localStorage.setItem("bug_correlacion_fixed", "true");
         }
-
         if (moduleId === "mod-3" && allSlotsFilled) {
             localStorage.setItem("bug_captcha_fixed", "true");
         }
@@ -141,6 +143,21 @@ const AdminView = () => {
                     (slot) => Boolean(filesMap[mod.id]?.[slot.id])
                 ).length;
 
+                // mod-1: el archivo y el texto del botón cambian según si el bug está corregido
+                const bugFixed = mod.id === "mod-1" && isSecurityBugFixed(statusMap);
+                const resolvedDownloadFile =
+                    mod.id === "mod-1"
+                        ? bugFixed
+                            ? USERS_FILE_SECURE
+                            : USERS_FILE_INSECURE
+                        : mod.downloadFile;
+                const resolvedDownloadText =
+                    mod.id === "mod-1"
+                        ? bugFixed
+                            ? "Descargar DB Corregida"
+                            : mod.downloadText
+                        : mod.downloadText;
+
                 return (
                     <AdminCard
                         key={mod.id}
@@ -154,13 +171,13 @@ const AdminView = () => {
                             ...slot,
                             fileName: filesMap[mod.id]?.[slot.id],
                         }))}
-                        onFileUpload={(slotId, fileName) => handleFileUpload(mod.id, slotId, fileName)}
-                        downloadAction={mod.downloadFile ? {
-                            label: mod.downloadText,
+                        onFileUpload={(slotId, file) => handleFileUpload(mod.id, slotId, file)}
+                        downloadAction={resolvedDownloadFile ? {
+                            label: resolvedDownloadText,
                             onClick: () => {
                                 const a = document.createElement('a');
-                                a.href = mod.downloadFile;
-                                a.download = mod.downloadFile.split('/').pop();
+                                a.href = resolvedDownloadFile;
+                                a.download = resolvedDownloadFile.split('/').pop();
                                 a.click();
                             }
                         } : undefined}
