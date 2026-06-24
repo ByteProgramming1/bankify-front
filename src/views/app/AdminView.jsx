@@ -34,7 +34,7 @@ const MODULES = [
         title: "Configuración de Verificación Visual con modelo CATPCHA",
         team: "EQUIPO DE inteligencia artificial",
         icon: IconPhotoScan,
-        downloadFile: "/captcha-config-template.json",
+        downloadFile: "/files/modelo-ia 1.zip",
         downloadText: "Descargar archivo de configuración",
         uploadSlots: [
             { id: 1, label: "Carga el modelo de verificación visual para actualizar el módulo de autenticación." },
